@@ -1,0 +1,15 @@
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\bin\Debug\net8.0\Application.Blogging.deps.json
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\bin\Debug\net8.0\Application.Blogging.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\bin\Debug\net8.0\Application.Blogging.pdb
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\bin\Debug\net8.0\Domain.Blogging.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\bin\Debug\net8.0\Domain.Blogging.pdb
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.csproj.AssemblyReference.cache
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.GeneratedMSBuildEditorConfig.editorconfig
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.AssemblyInfoInputs.cache
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.AssemblyInfo.cs
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.csproj.CoreCompileInputs.cache
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Applicat.1BDBDBA9.Up2Date
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\refint\Application.Blogging.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\Application.Blogging.pdb
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Application.Blogging\obj\Debug\net8.0\ref\Application.Blogging.dll
