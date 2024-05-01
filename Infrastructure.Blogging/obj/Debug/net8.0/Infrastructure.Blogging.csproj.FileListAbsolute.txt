@@ -17,3 +17,4 @@ D:\work-place\sharp projects\BisleriumBloggingCoursework\Infrastructure.Blogging
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Infrastructure.Blogging\obj\Debug\net8.0\Infrastructure.Blogging.pdb
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Infrastructure.Blogging\obj\Debug\net8.0\Infrastructure.Blogging.genruntimeconfig.cache
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Infrastructure.Blogging\obj\Debug\net8.0\ref\Infrastructure.Blogging.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Infrastructure.Blogging\obj\Debug\net8.0\Infrastructure.Blogging.sourcelink.json

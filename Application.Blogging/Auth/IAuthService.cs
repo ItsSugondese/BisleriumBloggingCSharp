@@ -10,5 +10,6 @@ namespace Application.Blogging.Auth
     public interface IAuthService
     {
         Task registerUser(RegisterViewModel model);
+        Task<string> token(LoginViewModel model);
     }
 }

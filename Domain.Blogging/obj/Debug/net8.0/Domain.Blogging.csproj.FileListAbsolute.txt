@@ -12,3 +12,4 @@ D:\work-place\sharp projects\BisleriumBloggingCoursework\Domain.Blogging\obj\Deb
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Domain.Blogging\obj\Debug\net8.0\Domain.Blogging.csproj.AssemblyReference.cache
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Domain.Blogging\bin\Debug\net8.0\Domain.Blogging.runtimeconfig.json
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Domain.Blogging\obj\Debug\net8.0\Domain.Blogging.genruntimeconfig.cache
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Domain.Blogging\obj\Debug\net8.0\Domain.Blogging.sourcelink.json

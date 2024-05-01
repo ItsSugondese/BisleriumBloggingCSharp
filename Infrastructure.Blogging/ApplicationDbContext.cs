@@ -1,4 +1,6 @@
 ﻿using Domain.Blogging;
+using Domain.Blogging.Entities;
+using Domain.Blogging.Entities.temporary_attachments;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +18,7 @@ namespace Infrastructure.Blogging
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=BisleriumBlogging;Username=postgres;Password=admin");
         }
 
-        public DbSet<Student> Students { get; set; }
+        public DbSet<Blog> Blog { get; set; }
+        public DbSet<TemporaryAttachments> TemporaryAttachments { get; set; }
     }
 }

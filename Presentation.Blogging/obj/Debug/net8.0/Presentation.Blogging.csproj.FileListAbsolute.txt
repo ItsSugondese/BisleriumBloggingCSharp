@@ -48,3 +48,17 @@ D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\o
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\obj\Debug\net8.0\Presentation.Blogging.genruntimeconfig.cache
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\obj\Debug\net8.0\ref\Presentation.Blogging.dll
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\obj\Debug\net8.0\Presentation.Blogging.sourcelink.json
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\System.Net.Http.Formatting.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\System.Web.Http.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Newtonsoft.Json.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\AutoMapper.dll
