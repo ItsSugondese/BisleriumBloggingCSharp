@@ -6,6 +6,7 @@ namespace Presentation.Blogging.Generics
 {
     public class GenericController : ControllerBase
     {
+        public string moduleName { get; set; }
         protected readonly ResponseStatus ApiResponseStatus = ResponseStatus.Success;
         protected GlobalApiResponse SuccessResponse(string message, CrudStatus status,  object data)
         {

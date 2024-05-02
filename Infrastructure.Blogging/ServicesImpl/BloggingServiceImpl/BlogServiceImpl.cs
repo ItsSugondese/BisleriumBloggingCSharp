@@ -1,10 +1,14 @@
 ﻿using Application.Blogging.BlogApp;
+using Application.Blogging.RepoInterface.BloggingRepoInterface;
+using Application.RepoInterface.BlogginRepoInterface;
 using Domain.Blogging;
 using Domain.Blogging.Constant;
 using Domain.Blogging.Entities;
 using Domain.Blogging.Entities.temporary_attachments;
 using Domain.Blogging.Utils.GenericFile;
 using Domain.Blogging.view.BLogView;
+using Domain.Blogging.view.BLogView.PaginationViewForBLog;
+using Infrastructure.Blogging.Repo.RepoBlogReact;
 using Infrastructure.Blogging.utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,24 +20,40 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Blogging.ServicesImpl.BlogImpl
+namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
 {
     public class BlogServiceImpl : IBlogService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly JwtTokenService _tokenService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IBlogReactRepo _blogReactRepo;
+        private readonly IBlogRepo _blogRepo;
         private readonly GenericFileUtils genericFileUtils;
 
-        public BlogServiceImpl(ApplicationDbContext dbContext,  IHttpContextAccessor httpContextAccessor, JwtTokenService tokenService,
-           UserManager<AppUser> userManager, GenericFileUtils genericFileUtils)
+
+        public BlogServiceImpl(ApplicationDbContext dbContext, JwtTokenService tokenService,
+           UserManager<AppUser> userManager, GenericFileUtils genericFileUtils, IBlogReactRepo blogReactRepo, IBlogRepo blogRepo)
         {
             _dbContext = dbContext;
-            _httpContextAccessor = httpContextAccessor;
             _tokenService = tokenService;
             _userManager = userManager;
             this.genericFileUtils = genericFileUtils;
+            _blogReactRepo = blogReactRepo;
+            _blogRepo = blogRepo;
+        }
+
+        public async Task deleteBlog(int id)
+        {
+            Blog blog = await _blogRepo.FindById(id);
+            _dbContext.BlogReactMappings.RemoveRange(await _blogReactRepo.GetAllByBlogId(id));
+            _dbContext.Blog.Remove(blog);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model)
+        {
+            return await _blogRepo.GetBlogPaginataed(model);
         }
 
         public async Task saveBlog(BlogViewModel model)

@@ -10,6 +10,8 @@ namespace Domain.Blogging.Constant
     {
         public static string AUTH = "Auth";
         public static string BLOG = "Blog";
+        public static string COMMENT = "Comment";
+        public static string USER = "User";
         public static string TEMPORARY_ATTACHMENTS = "Temporary Attachments";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.Blogging;
+using Domain.Blogging.Constant;
 using Domain.Blogging.Entities;
 using Domain.Blogging.Entities.temporary_attachments;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,10 +16,23 @@ namespace Infrastructure.Blogging
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=BisleriumBlogging;Username=postgres;Password=admin");
+            optionsBuilder.UseNpgsql(ConnectionStringConstant.connection);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder
+                .Entity<BlogReactMapping>()
+                .HasOne(e => e.Blog)
+                .WithMany()
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
 
         public DbSet<Blog> Blog { get; set; }
+        public DbSet<BlogReactMapping> BlogReactMappings { get; set; }
+        public DbSet<Comments> Comments { get; set; }
+        public DbSet<CommentReactMapping> CommentReactMappings { get; set; }
         public DbSet<TemporaryAttachments> TemporaryAttachments { get; set; }
     }
 }

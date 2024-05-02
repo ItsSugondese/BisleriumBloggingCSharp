@@ -25,6 +25,8 @@ namespace Domain.Blogging.view.auth
         public string? ConfirmPassword { get; set; }
 
         [Required]
-        public string? Role { get; set; } // Property to specify the role of the user
+        public string Role = "Blogger";
+
+        public int? FileId { get; set; }// Property to specify the role of the user
     }
 }

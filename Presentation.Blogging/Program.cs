@@ -15,9 +15,14 @@ using System.Net;
 using Application.Blogging.TemporaryAttachement;
 using Infrastructure.Blogging.ServicesImpl.temporary_attachments;
 using Application.Blogging.BlogApp;
-using Infrastructure.Blogging.ServicesImpl.BlogImpl;
+using Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl;
 using Infrastructure.Blogging.utils;
 using Domain.Blogging.Utils.GenericFile;
+using Infrastructure.Blogging.Repo.RepoBlogReact;
+using Application.RepoInterface.BlogginRepoInterface;
+using Application.Blogging.RepoInterface.BloggingRepoInterface;
+using Application.Blogging.RepoInterface.UserRepoInterface;
+using Infrastructure.Blogging.Repo.RepoUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +30,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
 builder.Services.AddScoped<ITemporaryAttachmentsService, TemporaryAttachmentsServiceImpl>();
 builder.Services.AddScoped<IBlogService, BlogServiceImpl>();
+builder.Services.AddScoped<IBlogReactMappingService, BlogReactMappingServiceImpl>();
+builder.Services.AddScoped<ICommentService, CommentServiceImpl>();
+builder.Services.AddScoped<ICommentReactMappingService, CommentReactMappingServiceImpl>();
+
+//solo service 
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<GenericFileUtils>();
-// Add services to the container.
+
+//repo
+builder.Services.AddScoped<IBlogReactRepo, BlogReactRepoImpl>();
+builder.Services.AddScoped<ICommentRepo, CommentRepoImpl>();
+builder.Services.AddScoped<ICommentReactRepo, CommentReactRepoImpl>();
+builder.Services.AddScoped<IBlogRepo, BlogRepoImpl>();
+builder.Services.AddScoped<IUserRepo, UserRepoImpl>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>();
@@ -83,15 +99,26 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddApiEndpoints();
 
 
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.IgnoreNullValues = true;
 });
 
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(typeof(CustomExceptionFilterAttribute));
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy" ,builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
 });
 var app = builder.Build();
 
@@ -122,13 +149,13 @@ using (var scope = app.Services.CreateScope())
 
 app.MapIdentityApi<AppUser>();
 
+app.UseCors("CorsPolicy");
 
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
 
 //app.UseMiddleware<CustomMiddleware>();
-
 
 app.MapControllers();
 

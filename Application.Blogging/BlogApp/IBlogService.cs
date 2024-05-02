@@ -1,4 +1,6 @@
-﻿using Domain.Blogging.view.BLogView;
+﻿using Domain.Blogging.Entities;
+using Domain.Blogging.view.BLogView;
+using Domain.Blogging.view.BLogView.PaginationViewForBLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +12,8 @@ namespace Application.Blogging.BlogApp
     public interface IBlogService
     {
         Task saveBlog(BlogViewModel model);
+        Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model);
+        Task deleteBlog(int id);
+
     }
 }

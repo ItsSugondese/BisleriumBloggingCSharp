@@ -17,7 +17,7 @@ namespace Presentation.Blogging.Controllers
     {
         private readonly IAuthService authService;
         private string moduleName;
-
+        public record UserSession(string? Id, string? Name, string? Email, string? Role);
         public AuthController(IAuthService authService)
         {
             this.authService = authService;
@@ -34,8 +34,8 @@ namespace Presentation.Blogging.Controllers
         [HttpPost("login")]
         public async Task<Object> LoginUser (LoginViewModel model)
         {
-            string token = await authService.token(model);
-            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName), CrudStatus.SAVE,  token);
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName), CrudStatus.SAVE,
+                await authService.token(model));
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

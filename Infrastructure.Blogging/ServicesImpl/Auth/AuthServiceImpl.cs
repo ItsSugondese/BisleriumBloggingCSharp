@@ -1,9 +1,15 @@
 ﻿using Application.Blogging.Auth;
 using Domain.Blogging;
+using Domain.Blogging.Constant;
+using Domain.Blogging.Entities.temporary_attachments;
+using Domain.Blogging.Entities;
+using Domain.Blogging.Utils.GenericFile;
 using Domain.Blogging.view.auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,12 +21,18 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly GenericFileUtils genericFileUtils;
+        private readonly ApplicationDbContext _dbContext;
+        
 
-        public AuthServiceImpl(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthServiceImpl(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration,
+            GenericFileUtils genericFileUtils, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            this.genericFileUtils = genericFileUtils;
+            _dbContext = dbContext;
         }
 
         public async Task registerUser(RegisterViewModel model)
@@ -35,6 +47,11 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
             {
                 // If the role doesn't exist, return error
                 throw new Exception("Invalid role specified.");
+            }
+            if (model.FileId != null)
+            {
+                TemporaryAttachments tempAttach = await _dbContext.TemporaryAttachments.FirstOrDefaultAsync(s => s.Id == model.FileId);
+                user.ProfilePath = genericFileUtils.CopyFileToServer(tempAttach.Location, FilePathMapping.BLOG_PICTURE, FilePathConstants.TempPath);
             }
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -54,7 +71,7 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
 
         }
 
-        public async Task<string> token(LoginViewModel model)
+        public async Task<AuthViewResponse> token(LoginViewModel model)
         {
 
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -75,7 +92,7 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
                     {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email),
-                        // Add other claims as needed
+                new Claim(ClaimTypes.GivenName, user.UserName),
                     }),
                     Issuer = _configuration["Jwt:Issuer"],
                     Audience = _configuration["Jwt:Audience"],
@@ -84,7 +101,13 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
                 };
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
-                return tokenHandler.WriteToken(token);
+
+                return new AuthViewResponse() { 
+                    jwtToken= tokenHandler.WriteToken(token) ,
+                    roles = (await _userManager.GetRolesAsync(user)).FirstOrDefault(),
+                    username = user.UserName
+
+            }; ;
             }
 
             throw new Exception("Invalid password.");
