@@ -1,4 +1,5 @@
 ﻿using Application.Blogging.BlogApp;
+using Application.RepoInterface.BlogginRepoInterface;
 using Domain.Blogging.Constant;
 using Domain.Blogging.enums;
 using Domain.Blogging.view.BLogView;
@@ -15,13 +16,16 @@ namespace Presentation.Blogging.Controllers
     public class CommentController : GenericController
     {
         private readonly ICommentService _commentService;
+        private readonly ICommentRepo _commentRepo;
         private readonly ICommentReactMappingService _commentReactService;
         private string moduleName;
-        public CommentController(ICommentService commentService, ICommentReactMappingService commentReactService)
+        public CommentController(ICommentService commentService, ICommentReactMappingService commentReactService,
+            ICommentRepo commentRepo)
         {
             this._commentService = commentService;
             this.moduleName = ModuleNameConstant.COMMENT;
             _commentReactService = commentReactService;
+            _commentRepo = commentRepo;
         }
 
 
@@ -40,8 +44,8 @@ namespace Presentation.Blogging.Controllers
         public async Task<Object> ReactOnBlog(CommentReactMappingViewModel requestPojo)
         {
             await _commentReactService.SaveCommentReaction(requestPojo);
-            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName + " Reaction"),
-                CrudStatus.SAVE,
+            return SuccessResponse(moduleName + " Reaction successful",
+                CrudStatus.GET,
                true);
         }
     }

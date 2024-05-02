@@ -35,6 +35,31 @@ namespace Infrastructure.Blogging.Repo.RepoBlogReact
             return blog;
         }
 
+        public  Dictionary<string, object> GetBlogBasicDetailsByBlogId(int blogId)
+        {
+            string queryString = $@"select b.""Id"" as id, b.""Title"" as title, b.""Content"" as content, b.""ImagePath"" as ""imageUrl"",
+to_char(b.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') as ""postedOn"", anu.""UserName"" as username ,
+anu.""ProfilePath"" as ""userProfile"", anu.""Id"" as ""userId"", b.""CreatedAt"",
+coalesce ((select sum(case when brm.""Reaction""  = 'UPVOTE' then 2 else -1 end) from ""BlogReactMappings"" brm where brm.""BlogId"" = b.""Id""),0) score,
+coalesce ((select count(*) from ""Comments"" c where ""BlogId"" = b.""Id""), 0) comments,
+coalesce ((select case when brm2.""Reaction"" = 'UPVOTE' then true else false end from ""BlogReactMappings"" brm2 
+where brm2.""UserId"" = '{_jwtTokenService.GetUserIdFromToken()}' and brm2.""BlogId"" = b.""Id""), null) ""hasReacted""
+from ""Blog"" b join ""AspNetUsers"" anu ON b.""UserId"" = anu.""Id""
+where b.""Id"" = {blogId}";
+
+            List<Dictionary<string, object>> resultList = new List<Dictionary<string, object>>();
+
+            // Create a connection to PostgreSQL using Npgsql
+            ConnectionStringConfig.getValueFromQuery(resultList, queryString);
+            var result = resultList.FirstOrDefault();
+
+            if(result == null)
+            {
+                throw new Exception(MessageConstantMerge.notExist("Id", ModuleNameConstant.BLOG));
+            }
+            return result;
+        }
+
         public async Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model)
         {
             

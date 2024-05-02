@@ -13,6 +13,7 @@ namespace Application.Blogging.RepoInterface.BloggingRepoInterface
         Task<Blog> FindById(int id);
 
         Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model);
+        Dictionary<string, object> GetBlogBasicDetailsByBlogId(int blogId);
 
     }
 }

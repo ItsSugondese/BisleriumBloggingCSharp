@@ -1,4 +1,5 @@
 ﻿using Application.Blogging.BlogApp;
+using Application.Blogging.RepoInterface.BloggingRepoInterface;
 using Application.Blogging.TemporaryAttachement;
 using Domain.Blogging.Constant;
 using Domain.Blogging.Entities;
@@ -20,13 +21,14 @@ namespace Presentation.Blogging.Controllers
     public class BlogController : GenericController
     {
         private readonly IBlogService _blogService;
+        private readonly IBlogRepo _blogRepo;
         private readonly IBlogReactMappingService _blogReactService;
-        private string moduleName;
-        public BlogController(IBlogService temporaryAttachmentsService, IBlogReactMappingService blogReactService)
+        public BlogController(IBlogService blogService, IBlogReactMappingService blogReactService, IBlogRepo blogRepo)
         {
-            this._blogService = temporaryAttachmentsService;
             this.moduleName = ModuleNameConstant.BLOG;
             _blogReactService = blogReactService;
+            _blogService = blogService;
+            _blogRepo = blogRepo;
         }
 
 
@@ -59,6 +61,14 @@ namespace Presentation.Blogging.Controllers
                true);
         }
         
+        [HttpGet("{id}")]
+        public async Task<Object> GetBlogById(int id)
+        {
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName),
+                CrudStatus.GET,
+               await _blogService.GetBlogDetailsById(id));
+        }
+        
         [HttpPost("react")]
         public async Task<Object> ReactOnBlog(BlogReactMappingViewModel requestPojo)
         {
@@ -71,14 +81,14 @@ namespace Presentation.Blogging.Controllers
         [HttpGet("doc/{id}")]
         public async Task<Object> GetDocs(int id)
         {
-            //Blog blog = await _blogService.FindById(id);
-            //string? photoPath = blog.ImagePath;
+            Blog blog = await _blogRepo.FindById(id);
+            string? photoPath = blog.ImagePath;
 
-            //if (photoPath != null && !string.IsNullOrEmpty(photoPath))
-            //{
-            //    Byte[] b = System.IO.File.ReadAllBytes(photoPath);            
-            //    return File(b, "image/jpeg");
-            //}
+            if (photoPath != null && !string.IsNullOrEmpty(photoPath))
+            {
+                Byte[] b = System.IO.File.ReadAllBytes(photoPath);
+                return File(b, "image/jpeg");
+            }
 
             return null;
         }

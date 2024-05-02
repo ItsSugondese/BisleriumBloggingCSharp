@@ -29,11 +29,13 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         private readonly UserManager<AppUser> _userManager;
         private readonly IBlogReactRepo _blogReactRepo;
         private readonly IBlogRepo _blogRepo;
+        private readonly ICommentRepo _commentRepo;
         private readonly GenericFileUtils genericFileUtils;
 
 
         public BlogServiceImpl(ApplicationDbContext dbContext, JwtTokenService tokenService,
-           UserManager<AppUser> userManager, GenericFileUtils genericFileUtils, IBlogReactRepo blogReactRepo, IBlogRepo blogRepo)
+           UserManager<AppUser> userManager, GenericFileUtils genericFileUtils, IBlogReactRepo blogReactRepo, IBlogRepo blogRepo,
+           ICommentRepo commentRepo)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;
@@ -41,6 +43,7 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
             this.genericFileUtils = genericFileUtils;
             _blogReactRepo = blogReactRepo;
             _blogRepo = blogRepo;
+            _commentRepo = commentRepo;
         }
 
         public async Task deleteBlog(int id)
@@ -51,9 +54,22 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<Dictionary<string, object>> GetBlogDetailsById(int blogId)
+        {
+            Blog blog = await _blogRepo.FindById(blogId);
+
+            Dictionary<string, object> dic = _blogRepo.GetBlogBasicDetailsByBlogId(blogId);
+            dic.Add("commentDetails", await _commentRepo.GetCommentsOfBlogByBlogId(blogId));
+            
+
+            return dic;
+
+        }
+
         public async Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model)
         {
             return await _blogRepo.GetBlogPaginataed(model);
+
         }
 
         public async Task saveBlog(BlogViewModel model)

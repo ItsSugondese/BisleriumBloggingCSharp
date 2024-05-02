@@ -13,6 +13,7 @@ namespace Application.Blogging.BlogApp
     {
         Task saveBlog(BlogViewModel model);
         Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model);
+        Task<Dictionary<string, object>> GetBlogDetailsById(int blogId);
         Task deleteBlog(int id);
 
     }

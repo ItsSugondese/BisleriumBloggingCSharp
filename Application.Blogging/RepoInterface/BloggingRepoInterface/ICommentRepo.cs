@@ -10,6 +10,7 @@ namespace Application.RepoInterface.BlogginRepoInterface
     public interface ICommentRepo
     {
         Task<List<Comments>> GetAllByBlogId(int blogId);
+        Task<List<Dictionary<string, object>>> GetCommentsOfBlogByBlogId(int blogId);
         Task<Comments> FindById(int id);
 
     }
