@@ -23,6 +23,8 @@ using Application.RepoInterface.BlogginRepoInterface;
 using Application.Blogging.RepoInterface.BloggingRepoInterface;
 using Application.Blogging.RepoInterface.UserRepoInterface;
 using Infrastructure.Blogging.Repo.RepoUser;
+using Application.Blogging.UserApp;
+using Infrastructure.Blogging.ServicesImpl.UserServicesImpl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,7 @@ builder.Services.AddScoped<IBlogService, BlogServiceImpl>();
 builder.Services.AddScoped<IBlogReactMappingService, BlogReactMappingServiceImpl>();
 builder.Services.AddScoped<ICommentService, CommentServiceImpl>();
 builder.Services.AddScoped<ICommentReactMappingService, CommentReactMappingServiceImpl>();
+builder.Services.AddScoped<IUserService, UserServiceImpl>();
 
 //solo service 
 builder.Services.AddScoped<JwtTokenService>();

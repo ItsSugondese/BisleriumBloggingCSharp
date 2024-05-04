@@ -16,5 +16,7 @@ namespace Domain.Blogging.view.BLogView.PaginationViewForBLog
         public string name { get; set; }
         public string fromDate { get; set; }
         public string toDate { get; set; }
+
+        public bool ofUser { get; set; } = false;
     }
 }

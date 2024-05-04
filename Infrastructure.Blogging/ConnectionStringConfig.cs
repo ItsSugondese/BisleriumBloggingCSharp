@@ -52,5 +52,29 @@ namespace Infrastructure.Blogging
             }
             return resultList;
         }
+
+        public static void deleteData(string deleteQuery)
+        {
+
+            try
+            {
+                // Establish a connection to the PostgreSQL database
+                using (NpgsqlConnection connection =  getConnection())
+                {
+                    connection.Open(); // Open the connection
+
+                    // Create a command with your SQL query and the NpgsqlConnection
+                    using (NpgsqlCommand command = new NpgsqlCommand(deleteQuery, connection))
+                    {
+                        // Execute the deletion query
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred: " + ex.Message);
+            }
+        }
     }
 }

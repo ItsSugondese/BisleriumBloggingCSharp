@@ -44,7 +44,7 @@ namespace Presentation.Blogging.Controllers
         }
         
         [HttpPost("paginated")]
-        public async Task<Object> SaveBlog(BlogPaginationViewModel requestPojo)
+        public async Task<Object> GetBlogPaginated(BlogPaginationViewModel requestPojo)
         {
             
             return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName),

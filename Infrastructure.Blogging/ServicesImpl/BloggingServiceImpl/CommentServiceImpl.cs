@@ -25,21 +25,27 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         private readonly UserManager<AppUser> _userManager;
         private readonly IBlogRepo _blogRepo;
         private readonly ICommentRepo _commentRepo;
+        private readonly ICommentReactRepo _reactRepo;
 
         public CommentServiceImpl(ApplicationDbContext dbContext, JwtTokenService tokenService,
            UserManager<AppUser> userManager, IBlogRepo blogRepo,
-           ICommentRepo commentRepo)
+           ICommentRepo commentRepo, ICommentReactRepo reactRepo)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;
             _userManager = userManager;
             _blogRepo = blogRepo;
             _commentRepo = commentRepo;
+            _reactRepo = reactRepo;
         }
 
-        public Task deleteComment(int id)
+        public async Task deleteComment(int id)
         {
-            throw new NotImplementedException();
+            Comments comment = await _commentRepo.FindById(id);
+            _dbContext.CommentReactMappings.RemoveRange(await _reactRepo.GetAllByCommentId(id));
+            _dbContext.Comments.Remove(comment);
+            await _dbContext.SaveChangesAsync();
+
         }
 
         

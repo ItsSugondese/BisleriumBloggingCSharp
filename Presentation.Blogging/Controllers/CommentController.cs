@@ -48,5 +48,14 @@ namespace Presentation.Blogging.Controllers
                 CrudStatus.GET,
                true);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<Object> DeleteComment(int id)
+        {
+            await _commentService.deleteComment(id);
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName),
+                CrudStatus.DELETE,
+               true);
+        }
     }
 }

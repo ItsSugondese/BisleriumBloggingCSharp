@@ -30,12 +30,14 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         private readonly IBlogReactRepo _blogReactRepo;
         private readonly IBlogRepo _blogRepo;
         private readonly ICommentRepo _commentRepo;
+        private readonly ICommentService _commentService;
+
         private readonly GenericFileUtils genericFileUtils;
 
 
         public BlogServiceImpl(ApplicationDbContext dbContext, JwtTokenService tokenService,
            UserManager<AppUser> userManager, GenericFileUtils genericFileUtils, IBlogReactRepo blogReactRepo, IBlogRepo blogRepo,
-           ICommentRepo commentRepo)
+           ICommentRepo commentRepo, ICommentService commentService)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;
@@ -44,11 +46,50 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
             _blogReactRepo = blogReactRepo;
             _blogRepo = blogRepo;
             _commentRepo = commentRepo;
+            _commentService = commentService;
         }
 
         public async Task deleteBlog(int id)
         {
+
             Blog blog = await _blogRepo.FindById(id);
+
+            if (blog.ImagePath != null)
+            {
+
+
+                try
+                {
+                    // Check if the file exists before attempting to delete it
+                    if (File.Exists(blog.ImagePath))
+                    {
+                        File.Delete(blog.ImagePath);
+                        Console.WriteLine("Image deleted successfully.");
+                    }
+                    else
+                    {
+                        throw new Exception("Somethign wrong happend when deleing image");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error occurred: " + ex.Message);
+                }
+            }
+
+            string comemntReactQuery = $@"DELETE FROM ""CommentReactMappings"" WHERE ""CommentId"" IN (
+    SELECT crm.""CommentId"" FROM ""CommentReactMappings"" crm
+    JOIN ""Comments"" c ON c.""Id"" = crm.""CommentId""
+    WHERE c.""BlogId"" = {id}
+)";
+
+            string commentQuery = $@"delete from ""Comments"" c where c.""BlogId"" = {id}";
+
+            ConnectionStringConfig.deleteData(comemntReactQuery);
+            ConnectionStringConfig.deleteData(commentQuery);
+
+            //await _commentService.deleteComment(id);
+
             _dbContext.BlogReactMappings.RemoveRange(await _blogReactRepo.GetAllByBlogId(id));
             _dbContext.Blog.Remove(blog);
             await _dbContext.SaveChangesAsync();

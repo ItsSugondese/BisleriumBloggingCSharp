@@ -1,7 +1,10 @@
 ﻿using Application.Blogging.RepoInterface.UserRepoInterface;
+using Application.Blogging.UserApp;
 using Domain.Blogging;
 using Domain.Blogging.Constant;
 using Domain.Blogging.enums;
+using Domain.Blogging.view.UserView;
+using Domain.Blogging.view.UserView.PaginationForUsers;
 using Infrastructure.Blogging.utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,15 +20,33 @@ namespace Presentation.Blogging.Controllers
     public class UserController : GenericController
     {
         private readonly IUserRepo _userRepo;
+        private readonly IUserService _userService;
         private readonly JwtTokenService _jwtTokenService;
 
-        public UserController(IUserRepo userRepo, JwtTokenService jwtTokenService)
+        public UserController(IUserRepo userRepo, JwtTokenService jwtTokenService, IUserService userService)
         {
             _userRepo = userRepo;
             _jwtTokenService = jwtTokenService;
+            _userService = userService;
             this.moduleName = ModuleNameConstant.USER;
         }
 
+        [HttpPost]
+        public async Task<Object> SaveUser(UpdateUserViewModel model)
+        {
+            await _userService.updateUser(model);
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName),
+                CrudStatus.SAVE,
+               true);
+        }
+
+        [HttpPost("paginated")]
+        public async Task<Object> GetAllUsers(UserPaginationViewModel model)
+        {
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName), CrudStatus.GET, 
+                await _userRepo.GetAllUsersBasicDetailsPaginated(model));
+        }
+        
         [HttpGet("profile")]
         public async Task<Object> GetUserProfile()
         {
@@ -33,6 +54,8 @@ namespace Presentation.Blogging.Controllers
             return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName), CrudStatus.GET, 
                 await _userRepo.GetUserProfileFromToken(_jwtTokenService.GetUserIdFromToken()));
         }
+
+
 
         [HttpGet("photo/{id}")]
         public async Task<Object> GetDocs(string id)
@@ -48,7 +71,18 @@ namespace Presentation.Blogging.Controllers
 
             return null;
         }
-    [HttpGet("test")]
+
+        [HttpDelete("photo/{id}")]
+        public async Task<Object> DeleteUser(string id)
+        {
+            await _userRepo.DeleteProfilePicByUserId(id);
+            return SuccessResponse("Image deleted successfully",
+                CrudStatus.SAVE,
+               true);
+        }
+        
+
+        [HttpGet("test")]
         public async Task<Object> Testing()
         {
             return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName), CrudStatus.GET,

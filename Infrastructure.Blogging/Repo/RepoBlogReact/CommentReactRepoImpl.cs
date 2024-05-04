@@ -21,7 +21,7 @@ namespace Infrastructure.Blogging.Repo.RepoBlogReact
         public async Task<List<CommentReactMapping>> GetAllByCommentId(int CommentId)
         {
             return await _dbContext.CommentReactMappings
-       .FromSqlRaw("SELECT * FROM \"CommentReactMappings\" brm WHERE brm.\"CommentId\" = {0}", CommentId)
+       .FromSqlRaw("SELECT * FROM \"CommentReactMappings\" crm WHERE crm.\"CommentId\" = {0}", CommentId)
        .ToListAsync();
         }
 
