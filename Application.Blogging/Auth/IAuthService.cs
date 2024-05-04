@@ -11,5 +11,7 @@ namespace Application.Blogging.Auth
     {
         Task registerUser(RegisterViewModel model);
         Task<AuthViewResponse> token(LoginViewModel model);
+        Task<string> GeneratePasswordResetToken(string email);
+        Task ResetUserPassword(ResetPasswordViewModel model);
     }
 }

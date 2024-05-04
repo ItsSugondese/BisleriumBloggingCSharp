@@ -68,15 +68,17 @@ where b.""Id"" = {blogId}";
             var total = _dbContext.Blog.Count();
             string userId = _jwtTokenService.GetUserIdFromToken();
             var pageCount = Math.Ceiling(_dbContext.Blog.Count() / (float)model.Row);
-            string queryString = $@"select * from (select b.""Id"" as id, b.""Title"" as title, b.""Content"" as content,
+            string queryString = $@"select *, (foo.score + foo.comments) ""totalPoint"" from (select b.""Id"" as id, b.""Title"" as title, b.""Content"" as content,
 to_char(b.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') as ""postedOn"", anu.""UserName"" as username ,
 anu.""ProfilePath"" as ""userProfile"", anu.""Id"" as ""userId"", b.""CreatedAt"",
 coalesce ((select sum(case when brm.""Reaction""  = 'UPVOTE' then 2 else -1 end) from ""BlogReactMappings"" brm where brm.""BlogId"" = b.""Id""),0) score,
 coalesce ((select count(*) from ""Comments"" c where ""BlogId"" = b.""Id""), 0) comments,
 coalesce ((select case when brm2.""Reaction"" = 'UPVOTE' then true else false end from ""BlogReactMappings"" brm2 
-where brm2.""UserId"" = '{userId}' and brm2.""BlogId"" = b.""Id""), null) ""hasReacted""
+where brm2.""UserId"" = '{userId}' and brm2.""BlogId"" = b.""Id""), null) ""hasReacted"",
+coalesce ((select sum(case when brm.""Reaction"" = 'UPVOTE' then 1 else 0 end) from ""BlogReactMappings"" brm where brm.""BlogId"" = b.""Id""),0) upvote,
+coalesce ((select sum(case when brm.""Reaction"" = 'DOWNVOTE' then 1 else 0 end) from ""BlogReactMappings"" brm where brm.""BlogId"" = b.""Id""),0) downvote
 from ""Blog"" b join ""AspNetUsers"" anu ON b.""UserId"" = anu.""Id""
-where cast(b.""CreatedAt"" as date) between cast('{model.fromDate}' as date) and cast('{model.toDate}' as date) and 
+where case when {model.isAll} is true then true else cast(b.""CreatedAt"" as date) between cast('{model.fromDate}' as date) and cast('{model.toDate}' as date) end and 
 case when '{model.name}' = '' then true else anu.""UserName""  ilike  concat('%','{model.name}' ,'%')   end and 
 case when {model.ofUser} is true then b.""UserId"" = '{userId}' else true end) foo 
 ORDER BY 

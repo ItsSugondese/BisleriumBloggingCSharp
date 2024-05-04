@@ -17,7 +17,8 @@
           "Microsoft.EntityFrameworkCore.Design": "8.0.4",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.4",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.2"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.2",
+          "System.Net.Mail.Abstractions": "1.1.21"
         },
         "runtime": {
           "Infrastructure.Blogging.dll": {}
@@ -662,6 +663,14 @@
         }
       },
       "System.IO.Pipelines/6.0.3": {},
+      "System.Net.Mail.Abstractions/1.1.21": {
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Mail.Abstractions.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "1.1.21.0"
+          }
+        }
+      },
       "System.Reflection.Metadata/6.0.1": {
         "dependencies": {
           "System.Collections.Immutable": "6.0.0"
@@ -1063,6 +1072,13 @@
       "sha512": "sha512-ryTgF+iFkpGZY1vRQhfCzX0xTdlV3pyaTTqRu2ETbEv+HlV7O6y7hyQURnghNIXvctl5DuZ//Dpks6HdL/Txgw==",
       "path": "system.io.pipelines/6.0.3",
       "hashPath": "system.io.pipelines.6.0.3.nupkg.sha512"
+    },
+    "System.Net.Mail.Abstractions/1.1.21": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ai5VFcfdYVmOciq3AUD5i9oy7LE2zZFUouWDBHlFufzkUXsw9xnEW4DgtJNbmMVqHV9Mt5aJKoHRdie7+bNi5w==",
+      "path": "system.net.mail.abstractions/1.1.21",
+      "hashPath": "system.net.mail.abstractions.1.1.21.nupkg.sha512"
     },
     "System.Reflection.Metadata/6.0.1": {
       "type": "package",

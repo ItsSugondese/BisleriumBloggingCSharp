@@ -706,6 +706,15 @@
           "lib/netcoreapp2.1/_._": {}
         }
       },
+      "System.Net.Mail.Abstractions/1.1.21": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/System.Net.Mail.Abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Mail.Abstractions.dll": {}
+        }
+      },
       "System.Text.Encodings.Web/4.5.0": {
         "type": "package",
         "compile": {
@@ -768,7 +777,8 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.4",
           "Microsoft.EntityFrameworkCore": "8.0.4",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.2"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.2",
+          "System.Net.Mail.Abstractions": "1.1.21"
         },
         "compile": {
           "bin/placeholder/Infrastructure.Blogging.dll": {}
@@ -1988,6 +1998,18 @@
         "system.memory.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "System.Net.Mail.Abstractions/1.1.21": {
+      "sha512": "ai5VFcfdYVmOciq3AUD5i9oy7LE2zZFUouWDBHlFufzkUXsw9xnEW4DgtJNbmMVqHV9Mt5aJKoHRdie7+bNi5w==",
+      "type": "package",
+      "path": "system.net.mail.abstractions/1.1.21",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/System.Net.Mail.Abstractions.dll",
+        "system.net.mail.abstractions.1.1.21.nupkg.sha512",
+        "system.net.mail.abstractions.nuspec"
       ]
     },
     "System.Text.Encodings.Web/4.5.0": {

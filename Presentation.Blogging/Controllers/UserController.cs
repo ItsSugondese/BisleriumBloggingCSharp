@@ -73,10 +73,19 @@ namespace Presentation.Blogging.Controllers
         }
 
         [HttpDelete("photo/{id}")]
-        public async Task<Object> DeleteUser(string id)
+        public async Task<Object> DeleteUserImage(string id)
         {
             await _userRepo.DeleteProfilePicByUserId(id);
             return SuccessResponse("Image deleted successfully",
+                CrudStatus.SAVE,
+               true);
+        }
+        
+        [HttpDelete("{id}")]
+        public async Task<Object> DeleteUser(string id)
+        {
+            await _userService.DeleteUserAccount(id);
+            return SuccessResponse("User deleted successfully",
                 CrudStatus.SAVE,
                true);
         }

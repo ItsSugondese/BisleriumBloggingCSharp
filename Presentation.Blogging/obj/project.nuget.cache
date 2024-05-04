@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "nHex2KN6tvA4EoycUGrYQ53j3n12LHYEZFzQ+br3ZYvPXI8wCqizroo8dzZlX4FRyg4BGUt0dW46me+TbqHjUQ==",
+  "dgSpecHash": "Vm01XQNEuRkjJZzjB7BVpfhR6iMNUwZifxwH9dmUlwqWb1S3oUvnOZZJkDwlv2hHFeKllu6xfdVECcnzuya19g==",
   "success": true,
   "projectFilePath": "D:\\work-place\\sharp projects\\BisleriumBloggingCoursework\\Presentation.Blogging\\Presentation.Blogging.csproj",
   "expectedPackageFiles": [
@@ -47,6 +47,7 @@
     "C:\\Users\\Admin\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.1.2\\system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.net.mail.abstractions\\1.1.21\\system.net.mail.abstractions.1.1.21.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
   ],

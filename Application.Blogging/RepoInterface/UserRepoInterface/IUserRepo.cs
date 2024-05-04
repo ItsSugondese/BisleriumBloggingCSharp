@@ -13,6 +13,7 @@ namespace Application.Blogging.RepoInterface.UserRepoInterface
         Task<Dictionary<string, object>> GetUserProfileFromToken(string id);
         Task<Dictionary<string, object>> GetAllUsersBasicDetailsPaginated(UserPaginationViewModel model);
         Task<AppUser> FindById(string id);
+        Task<AppUser> FindByEmail(string email);
         Task DeleteProfilePicByUserId(string id);
         Task<Object> testing();
 

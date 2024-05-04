@@ -14,9 +14,10 @@ namespace Domain.Blogging.view.BLogView.PaginationViewForBLog
         [Required]
         public BlogSortEnums sort { get; set; }
         public string name { get; set; }
-        public string fromDate { get; set; }
-        public string toDate { get; set; }
+        public string fromDate { get; set; } = "2024-01-01";    
+        public string toDate { get; set; } = "2024-01-01";
 
         public bool ofUser { get; set; } = false;
+        public bool isAll { get; set; } = false;
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MsSsgqNlYF3j3U/Wo4XlGnCWGnzm4833Ku364SvzGvxjS7P8F/OPtv+bFn5Dk8fk+/WlvICV6ZrpFDxZ2hgRLA==",
+  "dgSpecHash": "ocDtwNHyiHyM5DfBuldiJHDZKi465Aoip5NZl1DAO7n7fZAztUMS5WZn8aITgJ0bGOoNKoInDEW7BpVP94X+dQ==",
   "success": true,
   "projectFilePath": "D:\\work-place\\sharp projects\\BisleriumBloggingCoursework\\Infrastructure.Blogging\\Infrastructure.Blogging.csproj",
   "expectedPackageFiles": [
@@ -55,6 +55,7 @@
     "C:\\Users\\Admin\\.nuget\\packages\\system.composition.typedparts\\6.0.0\\system.composition.typedparts.6.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.1.2\\system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.net.mail.abstractions\\1.1.21\\system.net.mail.abstractions.1.1.21.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.reflection.metadata\\6.0.1\\system.reflection.metadata.6.0.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\system.text.encoding.codepages\\6.0.0\\system.text.encoding.codepages.6.0.0.nupkg.sha512",

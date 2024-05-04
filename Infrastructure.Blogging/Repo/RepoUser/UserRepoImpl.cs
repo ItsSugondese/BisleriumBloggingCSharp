@@ -5,6 +5,7 @@ using Domain.Blogging.Entities;
 using Domain.Blogging.view.UserView;
 using Domain.Blogging.view.UserView.PaginationForUsers;
 using Infrastructure.Blogging.utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System;
@@ -18,10 +19,13 @@ namespace Infrastructure.Blogging.Repo.RepoUser
     public class UserRepoImpl: IUserRepo
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UserRepoImpl(ApplicationDbContext dbContext)
+
+        public UserRepoImpl(ApplicationDbContext dbContext, UserManager<AppUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task DeleteProfilePicByUserId(string id)
@@ -63,6 +67,16 @@ namespace Infrastructure.Blogging.Repo.RepoUser
                 throw new Exception(MessageConstantMerge.notExist("id", ModuleNameConstant.USER));
             }
 
+            return user;
+        }
+
+        public async Task<AppUser> FindByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception(MessageConstantMerge.notExist("email", ModuleNameConstant.USER));
+            }
             return user;
         }
 
@@ -174,5 +188,7 @@ using (NpgsqlConnection connection = ConnectionStringConfig.getConnection())
             return resultList;
 
         }
+
+       
     }
 }

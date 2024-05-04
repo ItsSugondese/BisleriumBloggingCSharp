@@ -25,6 +25,8 @@ using Application.Blogging.RepoInterface.UserRepoInterface;
 using Infrastructure.Blogging.Repo.RepoUser;
 using Application.Blogging.UserApp;
 using Infrastructure.Blogging.ServicesImpl.UserServicesImpl;
+using Application.Blogging.DashboardApp;
+using Infrastructure.Blogging.ServicesImpl.DashbaordImpl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +42,7 @@ builder.Services.AddScoped<IUserService, UserServiceImpl>();
 //solo service 
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<GenericFileUtils>();
+builder.Services.AddScoped<EmailService>();
 
 //repo
 builder.Services.AddScoped<IBlogReactRepo, BlogReactRepoImpl>();
@@ -47,6 +50,7 @@ builder.Services.AddScoped<ICommentRepo, CommentRepoImpl>();
 builder.Services.AddScoped<ICommentReactRepo, CommentReactRepoImpl>();
 builder.Services.AddScoped<IBlogRepo, BlogRepoImpl>();
 builder.Services.AddScoped<IUserRepo, UserRepoImpl>();
+builder.Services.AddScoped<IDashboardService, DashboardServiceImpl>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>();

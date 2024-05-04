@@ -13,6 +13,9 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Blogging.RepoInterface.UserRepoInterface;
+using Infrastructure.Blogging.utils;
+using System.Net;
 
 namespace Infrastructure.Blogging.ServicesImpl.Auth
 {
@@ -23,16 +26,39 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
         private readonly IConfiguration _configuration;
         private readonly GenericFileUtils genericFileUtils;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IUserRepo _userRepo;
+        private readonly EmailService _emailService;
+
         
 
         public AuthServiceImpl(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration,
-            GenericFileUtils genericFileUtils, ApplicationDbContext dbContext)
+            GenericFileUtils genericFileUtils, ApplicationDbContext dbContext, IUserRepo userRepo, EmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             this.genericFileUtils = genericFileUtils;
             _dbContext = dbContext;
+            _userRepo = userRepo;
+            _emailService = emailService;
+        }
+
+        public async Task<string> GeneratePasswordResetToken(string email)
+        {
+            AppUser user = await _userRepo.FindByEmail(email);
+        
+
+            // Generate the password reset token
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // Encode the token
+            string encodedToken = WebUtility.UrlEncode(token);
+
+            // Construct the reset password URL
+            string resetUrl = $"{_configuration["FrontUrl"]}/reset-password/{user.Email}/{encodedToken}";
+            string emailBody = $"<a href='{resetUrl}'>Click here to reset your password.</a>";
+             _emailService.SendEmailAsync(email, "Click link to reset password", emailBody);
+            return "Check your email";
         }
 
         public async Task registerUser(RegisterViewModel model)
@@ -71,10 +97,24 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
 
         }
 
+        public async Task ResetUserPassword(ResetPasswordViewModel model)
+        {
+            AppUser user = await _userRepo.FindByEmail(model.Email);
+         
+
+            // Reset password
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Password reset failed.");
+            }
+
+        }
+
         public async Task<AuthViewResponse> token(LoginViewModel model)
         {
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            AppUser user = await _userRepo.FindByEmail(model.Email);
             if (user == null)
             {
                 throw new Exception("User not found.");
@@ -112,6 +152,8 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
 
             throw new Exception("Invalid password.");
         }
+
+       
 
      
     }

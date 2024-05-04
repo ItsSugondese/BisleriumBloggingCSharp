@@ -21,6 +21,7 @@ namespace Domain.Blogging.Utils.GenericFile
                     throw new Exception($"{string.Join(", ", type)} Not Found!!");
                 }
 
+                
                 // Validate Extension here
                 Dictionary<string, object> extension = ValidateExtension(doc, type);
 

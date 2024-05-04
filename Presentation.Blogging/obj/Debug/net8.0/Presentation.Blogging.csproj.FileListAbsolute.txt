@@ -62,3 +62,4 @@ D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\b
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\AutoMapper.dll
+D:\work-place\sharp projects\BisleriumBloggingCoursework\Presentation.Blogging\bin\Debug\net8.0\System.Net.Mail.Abstractions.dll

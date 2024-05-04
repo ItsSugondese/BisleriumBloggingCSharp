@@ -10,5 +10,7 @@ namespace Application.Blogging.UserApp
     public interface IUserService
     {
         Task updateUser(UpdateUserViewModel model);
+        Task DeleteUserAccount(string id);
+
     }
 }
