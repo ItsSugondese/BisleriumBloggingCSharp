@@ -31,13 +31,14 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         private readonly IBlogRepo _blogRepo;
         private readonly ICommentRepo _commentRepo;
         private readonly ICommentService _commentService;
-
+        private readonly IBlogHistoryService _blogHistoryService;
+        private readonly IBlogHistoryRepo _blogHistoryRepo;
         private readonly GenericFileUtils genericFileUtils;
 
 
         public BlogServiceImpl(ApplicationDbContext dbContext, JwtTokenService tokenService,
            UserManager<AppUser> userManager, GenericFileUtils genericFileUtils, IBlogReactRepo blogReactRepo, IBlogRepo blogRepo,
-           ICommentRepo commentRepo, ICommentService commentService)
+           ICommentRepo commentRepo, ICommentService commentService, IBlogHistoryService blogHistoryService, IBlogHistoryRepo blogHistoryRepo)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;
@@ -47,23 +48,26 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
             _blogRepo = blogRepo;
             _commentRepo = commentRepo;
             _commentService = commentService;
+            _blogHistoryService = blogHistoryService;
+            _blogHistoryRepo = blogHistoryRepo;
         }
 
         public async Task deleteBlog(int id)
         {
 
             Blog blog = await _blogRepo.FindById(id);
+            List<BlogHistory> histories = await _blogHistoryRepo.GetAllByBlogId(id);
 
-            if (blog.ImagePath != null)
+            foreach (var history in histories)
             {
-
-
+                if (history.ImagePath != null)
+                {
                 try
                 {
                     // Check if the file exists before attempting to delete it
-                    if (File.Exists(blog.ImagePath))
+                    if (File.Exists(history.ImagePath))
                     {
-                        File.Delete(blog.ImagePath);
+                        File.Delete(history.ImagePath);
                         Console.WriteLine("Image deleted successfully.");
                     }
                     else
@@ -75,7 +79,10 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
                 {
                     throw new Exception("Error occurred: " + ex.Message);
                 }
+
+                }
             }
+          
 
             string comemntReactQuery = $@"DELETE FROM ""CommentReactMappings"" WHERE ""CommentId"" IN (
     SELECT crm.""CommentId"" FROM ""CommentReactMappings"" crm
@@ -85,12 +92,21 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
 
             string commentQuery = $@"delete from ""Comments"" c where c.""BlogId"" = {id}";
 
+            string commentHistory = $@"delete from ""CommentHistory"" crm  where crm.""Id"" in (
+select crm.""Id""  from ""CommentHistory""  crm join
+""Comments"" c on c.""Id"" = crm.""CommentId"" 
+join ""Blog"" b on b.""Id""  = c.""BlogId"" 
+where b.""Id"" = {id}
+)";
+
             ConnectionStringConfig.deleteData(comemntReactQuery);
+            ConnectionStringConfig.deleteData(commentHistory);
             ConnectionStringConfig.deleteData(commentQuery);
 
             //await _commentService.deleteComment(id);
 
             _dbContext.BlogReactMappings.RemoveRange(await _blogReactRepo.GetAllByBlogId(id));
+            _dbContext.BlogHistory.RemoveRange(histories);
             _dbContext.Blog.Remove(blog);
             await _dbContext.SaveChangesAsync();
         }
@@ -115,7 +131,6 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
 
         public async Task saveBlog(BlogViewModel model)
         {
-            var userId = _tokenService.GetUserIdFromToken();
 
             Blog blog;
 
@@ -131,7 +146,8 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
             }
             else
             {
-                // Insert scenario: Create a new blog instance
+            var userId = _tokenService.GetUserIdFromToken();
+
                 blog = new Blog
                 {
                     CreatedAt = DateTime.UtcNow,
@@ -139,21 +155,10 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
                 };
 
                 _dbContext.Add(blog);
-            }
-            // Update or set properties
-            blog.Content = model.Content;
-            blog.Title = model.Title;
-
-            // Handle image attachment if provided
-            if (model.FileId != null)
-            {
-                TemporaryAttachments tempAttach = await _dbContext.TemporaryAttachments.FirstOrDefaultAsync(s => s.Id == model.FileId);
-                blog.ImagePath = genericFileUtils.CopyFileToServer(tempAttach.Location, FilePathMapping.BLOG_PICTURE, FilePathConstants.TempPath);
-            }
-
-
-            // Save changes to the database
             await _dbContext.SaveChangesAsync();
+            }
+
+           await  _blogHistoryService.SaveBlogHistory(model, blog);
 
 
         }

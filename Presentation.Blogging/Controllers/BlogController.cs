@@ -23,12 +23,15 @@ namespace Presentation.Blogging.Controllers
         private readonly IBlogService _blogService;
         private readonly IBlogRepo _blogRepo;
         private readonly IBlogReactMappingService _blogReactService;
-        public BlogController(IBlogService blogService, IBlogReactMappingService blogReactService, IBlogRepo blogRepo)
+        private readonly IBlogHistoryRepo _blogHistoryRepo;
+        public BlogController(IBlogService blogService, IBlogReactMappingService blogReactService, IBlogRepo blogRepo,
+            IBlogHistoryRepo blogHistoryRepo)
         {
             this.moduleName = ModuleNameConstant.BLOG;
             _blogReactService = blogReactService;
             _blogService = blogService;
             _blogRepo = blogRepo;
+            _blogHistoryRepo = blogHistoryRepo;
         }
 
 
@@ -81,8 +84,8 @@ namespace Presentation.Blogging.Controllers
         [HttpGet("doc/{id}")]
         public async Task<Object> GetDocs(int id)
         {
-            Blog blog = await _blogRepo.FindById(id);
-            string? photoPath = blog.ImagePath;
+            BlogHistory blogHistory = await _blogHistoryRepo.FindById(id);
+            string? photoPath = blogHistory.ImagePath;
 
             if (photoPath != null && !string.IsNullOrEmpty(photoPath))
             {
@@ -91,6 +94,23 @@ namespace Presentation.Blogging.Controllers
             }
 
             return null;
+        }
+        
+        [HttpDelete("doc/{id}")]
+        public async Task<Object> DeleteDocsPicture(int id)
+        {
+            await _blogHistoryRepo.deleteImage(id);
+            return SuccessResponse("Image removed successfully",
+                CrudStatus.DELETE,
+               true);
+        }
+        
+        [HttpGet("history/{id}")]
+        public  Object GetBlogHistory(int id)
+        {
+            return SuccessResponse("Image removed successfully",
+                CrudStatus.GET,
+                _blogHistoryRepo.GetHistoryBasicDetailsByBlogId(id));
         }
     }
 }

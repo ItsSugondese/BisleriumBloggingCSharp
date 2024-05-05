@@ -26,10 +26,11 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         private readonly IBlogRepo _blogRepo;
         private readonly ICommentRepo _commentRepo;
         private readonly ICommentReactRepo _reactRepo;
+        private readonly ICommentHistoryService _historyService;
 
         public CommentServiceImpl(ApplicationDbContext dbContext, JwtTokenService tokenService,
            UserManager<AppUser> userManager, IBlogRepo blogRepo,
-           ICommentRepo commentRepo, ICommentReactRepo reactRepo)
+           ICommentRepo commentRepo, ICommentReactRepo reactRepo, ICommentHistoryService historyService)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;
@@ -37,10 +38,15 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
             _blogRepo = blogRepo;
             _commentRepo = commentRepo;
             _reactRepo = reactRepo;
+            _historyService = historyService;
         }
 
         public async Task deleteComment(int id)
         {
+
+            string commentHistory = $@"delete from ""CommentHistory"" crm  where crm.""CommentId"" = {id}";
+            ConnectionStringConfig.deleteData(commentHistory);
+
             Comments comment = await _commentRepo.FindById(id);
             _dbContext.CommentReactMappings.RemoveRange(await _reactRepo.GetAllByCommentId(id));
             _dbContext.Comments.Remove(comment);
@@ -57,7 +63,6 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
 
             if (model.Id != null)
             {
-                // Update scenario: Fetch the existing blog from the database
                 comment = await _commentRepo.FindById((int)model.Id);
             }
             else
@@ -71,15 +76,10 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
                 };
 
                 _dbContext.Add(comment);
-            }
-                // Update or set properties
-                comment.Content = model.Content;
-
-
-
-                // Save changes to the database
                 await _dbContext.SaveChangesAsync();
-            
+            }
+
+            await _historyService.SaveHistory(model, comment);
         }
     }
 }

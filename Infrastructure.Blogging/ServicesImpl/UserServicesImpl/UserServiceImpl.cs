@@ -58,7 +58,20 @@ join ""Blog"" b on b.""Id""  = c.""BlogId""
 where b.""UserId"" = '{id}'
 )";
 
-            string comment = $@"DELETE FROM ""Comments"" c  WHERE c.""UserId""  = '{id}'";
+            string blogHistory = $@"delete from ""BlogHistory"" where ""Id"" in (
+select brm.""Id""  from ""BlogHistory""  brm join ""Blog"" b on b.""Id"" = brm.""BlogId"" where b.""UserId"" = '{id}'
+)";
+
+            string commentHistory = $@"delete from ""CommentHistory""  where ""Id"" in (
+select crm.""Id""  from ""CommentHistory""  crm join
+""Comments"" c on c.""Id"" = crm.""CommentId"" 
+join ""Blog"" b on b.""Id""  = c.""BlogId"" 
+where b.""UserId"" = '{id}'
+)";
+
+            string comment = $@"delete from ""Comments""  where ""Id"" in (
+select c.""Id""  from ""Comments""  c join ""Blog"" b on b.""Id""  = c.""BlogId"" where b.""UserId"" = '{id}'
+)";
             string blog = $@"DELETE FROM ""Blog"" b  WHERE b.""UserId""  = '{id}'";
 
 
@@ -68,8 +81,10 @@ where b.""UserId"" = '{id}'
             
             ConnectionStringConfig.deleteData(userRole);
             ConnectionStringConfig.deleteData(commentReact);
+            ConnectionStringConfig.deleteData(commentHistory);
             ConnectionStringConfig.deleteData(comment);
             ConnectionStringConfig.deleteData(blogReact);
+            ConnectionStringConfig.deleteData(blogHistory);
             ConnectionStringConfig.deleteData(blog);
 
 

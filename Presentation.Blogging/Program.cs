@@ -38,6 +38,8 @@ builder.Services.AddScoped<IBlogReactMappingService, BlogReactMappingServiceImpl
 builder.Services.AddScoped<ICommentService, CommentServiceImpl>();
 builder.Services.AddScoped<ICommentReactMappingService, CommentReactMappingServiceImpl>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
+builder.Services.AddScoped<IBlogHistoryService, BlogHistroyServiceImpl>();
+builder.Services.AddScoped<ICommentHistoryService, CommentHistoryServiceImpl>();
 
 //solo service 
 builder.Services.AddScoped<JwtTokenService>();
@@ -51,6 +53,8 @@ builder.Services.AddScoped<ICommentReactRepo, CommentReactRepoImpl>();
 builder.Services.AddScoped<IBlogRepo, BlogRepoImpl>();
 builder.Services.AddScoped<IUserRepo, UserRepoImpl>();
 builder.Services.AddScoped<IDashboardService, DashboardServiceImpl>();
+builder.Services.AddScoped<IBlogHistoryRepo, BlogHistoryRepoImpl>();
+builder.Services.AddScoped<ICommentHistoryRepo, CommentHistoryRepoImpl>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>();

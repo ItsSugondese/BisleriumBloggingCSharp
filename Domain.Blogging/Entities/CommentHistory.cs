@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace Domain.Blogging.Entities
 {
-    public class Comments:GenericModel
+    public class CommentHistory : GenericModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public Blog? Blog { get; set; }
+        [Required]
+        public string? Content { get; set; }
 
-        public AppUser? User { get; set; }
+        public Comments Comment { get; set; }
     }
 }

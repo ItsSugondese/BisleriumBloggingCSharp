@@ -1,4 +1,5 @@
 ﻿using Application.Blogging.BlogApp;
+using Application.Blogging.RepoInterface.BloggingRepoInterface;
 using Application.RepoInterface.BlogginRepoInterface;
 using Domain.Blogging.Constant;
 using Domain.Blogging.enums;
@@ -17,15 +18,16 @@ namespace Presentation.Blogging.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly ICommentRepo _commentRepo;
+        private readonly ICommentHistoryRepo _commentHistoryRepo;
         private readonly ICommentReactMappingService _commentReactService;
-        private string moduleName;
         public CommentController(ICommentService commentService, ICommentReactMappingService commentReactService,
-            ICommentRepo commentRepo)
+            ICommentRepo commentRepo, ICommentHistoryRepo commentHistoryRepo)
         {
             this._commentService = commentService;
             this.moduleName = ModuleNameConstant.COMMENT;
             _commentReactService = commentReactService;
             _commentRepo = commentRepo;
+            _commentHistoryRepo = commentHistoryRepo;
         }
 
 
@@ -56,6 +58,14 @@ namespace Presentation.Blogging.Controllers
             return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName),
                 CrudStatus.DELETE,
                true);
+        }
+        
+        [HttpGet("history/{id}")]
+        public  Object GetCommentHistory(int id)
+        {
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName),
+                CrudStatus.DELETE,
+               _commentHistoryRepo.GetCommentHistoryBasicDetalsByCommentId(id));
         }
     }
 }

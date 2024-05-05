@@ -34,5 +34,7 @@ namespace Infrastructure.Blogging
         public DbSet<Comments> Comments { get; set; }
         public DbSet<CommentReactMapping> CommentReactMappings { get; set; }
         public DbSet<TemporaryAttachments> TemporaryAttachments { get; set; }
+        public DbSet<BlogHistory> BlogHistory { get; set; }
+        public DbSet<CommentHistory> CommentHistory { get; set; }
     }
 }
