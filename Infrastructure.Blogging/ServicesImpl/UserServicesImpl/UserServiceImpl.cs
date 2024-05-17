@@ -109,10 +109,6 @@ select c.""Id""  from ""Comments""  c join ""Blog"" b on b.""Id""  = c.""BlogId"
             }
 
             await _dbContext.SaveChangesAsync();
-
-
-
-
         }
     }
 }

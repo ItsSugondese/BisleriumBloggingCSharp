@@ -16,7 +16,6 @@ namespace Presentation.Blogging.Controllers
 {
     
     [Route("api/blog")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class BlogController : GenericController
     {
@@ -38,6 +37,8 @@ namespace Presentation.Blogging.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<Object> SaveBlog(BlogViewModel requestPojo)
         {
              await _blogService.saveBlog(requestPojo);
@@ -56,6 +57,8 @@ namespace Presentation.Blogging.Controllers
         }
         
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<Object> DeleteBlog(int id)
         {
              await _blogService.deleteBlog(id);
@@ -73,6 +76,8 @@ namespace Presentation.Blogging.Controllers
         }
         
         [HttpPost("react")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<Object> ReactOnBlog(BlogReactMappingViewModel requestPojo)
         {
              await _blogReactService.SaveBlogReaction(requestPojo);
@@ -97,6 +102,8 @@ namespace Presentation.Blogging.Controllers
         }
         
         [HttpDelete("doc/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         public async Task<Object> DeleteDocsPicture(int id)
         {
             await _blogHistoryRepo.deleteImage(id);

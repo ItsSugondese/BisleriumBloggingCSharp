@@ -35,7 +35,7 @@ namespace Presentation.Blogging.Controllers
         public async Task<Object> SaveUser(UpdateUserViewModel model)
         {
             await _userService.updateUser(model);
-            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.GET, moduleName),
+            return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName),
                 CrudStatus.SAVE,
                true);
         }
@@ -58,6 +58,7 @@ namespace Presentation.Blogging.Controllers
 
 
         [HttpGet("photo/{id}")]
+        [AllowAnonymous]
         public async Task<Object> GetDocs(string id)
         {
             AppUser user = await _userRepo.FindById(id);

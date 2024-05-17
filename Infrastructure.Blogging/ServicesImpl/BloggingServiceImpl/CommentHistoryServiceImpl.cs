@@ -20,6 +20,9 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         public CommentHistoryServiceImpl(ApplicationDbContext context) {
             _context = context;
         }
+
+        // to save comment history. comment Details and comment is send in paraemeter after saving 
+        // comment process is done
         public async Task SaveHistory(CommentViewModel model, Comments comment)
         {
             CommentHistory history = new CommentHistory

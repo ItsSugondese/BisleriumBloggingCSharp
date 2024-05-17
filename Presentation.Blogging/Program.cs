@@ -27,6 +27,10 @@ using Application.Blogging.UserApp;
 using Infrastructure.Blogging.ServicesImpl.UserServicesImpl;
 using Application.Blogging.DashboardApp;
 using Infrastructure.Blogging.ServicesImpl.DashbaordImpl;
+using Application.Blogging.NotificationApp;
+using Infrastructure.Blogging.ServicesImpl.NotificationsImpl;
+using Application.Blogging.RepoInterface.NotificationRepoInterface;
+using Infrastructure.Blogging.Repo.RepoNotification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,11 +44,13 @@ builder.Services.AddScoped<ICommentReactMappingService, CommentReactMappingServi
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IBlogHistoryService, BlogHistroyServiceImpl>();
 builder.Services.AddScoped<ICommentHistoryService, CommentHistoryServiceImpl>();
+builder.Services.AddScoped<INotificationService, NotificationServiceImpl>();
 
 //solo service 
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<GenericFileUtils>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<MyHub>();
 
 //repo
 builder.Services.AddScoped<IBlogReactRepo, BlogReactRepoImpl>();
@@ -55,6 +61,7 @@ builder.Services.AddScoped<IUserRepo, UserRepoImpl>();
 builder.Services.AddScoped<IDashboardService, DashboardServiceImpl>();
 builder.Services.AddScoped<IBlogHistoryRepo, BlogHistoryRepoImpl>();
 builder.Services.AddScoped<ICommentHistoryRepo, CommentHistoryRepoImpl>();
+builder.Services.AddScoped<INotificationRepo, NotificationRepoImpl>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>();
@@ -131,6 +138,12 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
+
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
+
 var app = builder.Build();
 
 
@@ -158,13 +171,21 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+
 app.MapIdentityApi<AppUser>();
 
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseRouting();
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<MyHub>("/toastr");
+});
+
 
 //app.UseMiddleware<CustomMiddleware>();
 

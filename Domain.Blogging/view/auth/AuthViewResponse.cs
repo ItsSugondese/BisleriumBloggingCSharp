@@ -11,5 +11,6 @@ namespace Domain.Blogging.view.auth
         public String jwtToken { get; set; }
         public String username { get; set; }
         public String roles { get; set; }
+        public String userId { get; set; }
     }
 }

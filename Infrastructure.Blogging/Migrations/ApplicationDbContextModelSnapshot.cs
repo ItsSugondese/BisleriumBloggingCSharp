@@ -258,6 +258,35 @@ namespace Infrastructure.Blogging.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Domain.Blogging.Entities.Notifications", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Domain.Blogging.Entities.temporary_attachments.TemporaryAttachments", b =>
                 {
                     b.Property<int?>("Id")
@@ -492,6 +521,17 @@ namespace Infrastructure.Blogging.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Blog");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Blogging.Entities.Notifications", b =>
+                {
+                    b.HasOne("Domain.Blogging.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

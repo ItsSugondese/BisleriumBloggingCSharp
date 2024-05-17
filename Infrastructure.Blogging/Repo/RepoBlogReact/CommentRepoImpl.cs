@@ -42,7 +42,15 @@ namespace Infrastructure.Blogging.Repo.RepoBlogReact
 
         public async Task<List<Dictionary<string, object>>> GetCommentsOfBlogByBlogId(int blogId)
         {
-            string userId = _jwtTokenService.GetUserIdFromToken();
+
+            string userId = "";
+            try
+            {
+                userId = _jwtTokenService.GetUserIdFromToken();
+            }
+            catch (Exception e)
+            {
+            }
             string queryString = $@"select * from (select  c.""Id"" as id, anu.""Id"" as ""userId"", to_char(c.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') ""postedOn"", 
 anu.""UserName"" as username, anu.""ProfilePath"" as ""userProfile"",
 case when c.""UserId""  = '{userId}' then true else false end as ""myComment"",

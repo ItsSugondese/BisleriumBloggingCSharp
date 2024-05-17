@@ -36,5 +36,6 @@ namespace Infrastructure.Blogging
         public DbSet<TemporaryAttachments> TemporaryAttachments { get; set; }
         public DbSet<BlogHistory> BlogHistory { get; set; }
         public DbSet<CommentHistory> CommentHistory { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
     }
 }

@@ -113,14 +113,16 @@ where b.""Id"" = {id}
 
         public async Task<Dictionary<string, object>> GetBlogDetailsById(int blogId)
         {
+            // check if blog exits
             Blog blog = await _blogRepo.FindById(blogId);
 
+            // get blog details 
             Dictionary<string, object> dic = _blogRepo.GetBlogBasicDetailsByBlogId(blogId);
+
+            // get comments people posted in that blog
             dic.Add("commentDetails", await _commentRepo.GetCommentsOfBlogByBlogId(blogId));
-            
 
             return dic;
-
         }
 
         public async Task<Dictionary<string, object>> GetBlogPaginataed(BlogPaginationViewModel model)
@@ -136,13 +138,7 @@ where b.""Id"" = {id}
 
             if (model.Id != null)
             {
-                // Update scenario: Fetch the existing blog from the database
-                blog = await _dbContext.Blog.FirstOrDefaultAsync(s => s.Id == model.Id);
-
-                if (blog == null)
-                {
-                    throw new Exception($"Blog with ID {model.Id} not found.");
-                }
+                blog = await _blogRepo.FindById((int) model.Id);
             }
             else
             {
@@ -159,8 +155,6 @@ where b.""Id"" = {id}
             }
 
            await  _blogHistoryService.SaveBlogHistory(model, blog);
-
-
         }
     }
 }

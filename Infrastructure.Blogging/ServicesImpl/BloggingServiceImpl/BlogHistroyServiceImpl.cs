@@ -30,7 +30,6 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
         }
         public async Task SaveBlogHistory(BlogViewModel model, Blog blog)
         {
-            BlogHistory? lastBlog = await _blogHistoryRepo.FindLatestByBlogId(blog.Id);
 
             BlogHistory history = new BlogHistory
             {
@@ -40,21 +39,25 @@ namespace Infrastructure.Blogging.ServicesImpl.BloggingServiceImpl
                 Title = model.Title,
             };
 
-           
+           // if user have send file
             if (model.FileId != null)
             {
                 TemporaryAttachments tempAttach = await _context.TemporaryAttachments.FirstOrDefaultAsync(s => s.Id == model.FileId);
                 history.ImagePath = genericFileUtils.CopyFileToServer(tempAttach.Location, FilePathMapping.BLOG_PICTURE, FilePathConstants.TempPath);
             }
 
+
+            // getting latest blog history of a blog
+            BlogHistory? lastBlog = await _blogHistoryRepo.FindLatestByBlogId(blog.Id);
+
+            // if tehre is previous blog history and there is imagePath too and also user haven't send a new file
+            // set last picture path to current histroy too
             if(lastBlog != null && lastBlog.ImagePath != null && model.FileId == null)
             {
                 history.ImagePath = lastBlog.ImagePath;
             }
-         
-              
 
-                _context.Add(history);
+            _context.Add(history);
             await _context.SaveChangesAsync();
         }
     }

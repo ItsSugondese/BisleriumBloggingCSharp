@@ -26,7 +26,9 @@ namespace Infrastructure.Blogging.Repo.RepoBlogReact
 
         public async Task<Blog> FindById(int id)
         {
-            Blog? blog = await _dbContext.Blog.FirstOrDefaultAsync(s => s.Id == id);
+            Blog? blog = await _dbContext.Blog
+                .Include(b => b.User)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (blog == null)
             {
@@ -37,11 +39,19 @@ namespace Infrastructure.Blogging.Repo.RepoBlogReact
 
         public  Dictionary<string, object> GetBlogBasicDetailsByBlogId(int blogId)
         {
-            string userId = _jwtTokenService.GetUserIdFromToken();
+            string userId = "";
+
+            try
+            {
+                userId = _jwtTokenService.GetUserIdFromToken();
+            }
+            catch (Exception e)
+            {
+            }
             string queryString = $@"select * from(select * from (select 
 b.""Id"" as id,
 anu.""UserName"" as username ,
-to_char(b.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') as postedOn,
+to_char(b.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') as ""postedOn"",
 anu.""ProfilePath"" as ""userProfile"", anu.""Id"" as ""userId"", b.""CreatedAt"",
 case when b.""UserId""  = '{userId}' then true else false end as ""myBlog"",
 anu.""ProfilePath"" as ""userProfile"", anu.""Id"" as ""userId"", b.""CreatedAt"",
@@ -76,12 +86,19 @@ limit 1
         {
             
             var total = _dbContext.Blog.Count();
-            string userId = _jwtTokenService.GetUserIdFromToken();
+            string userId = "";
+
+            try
+            {
+                userId = _jwtTokenService.GetUserIdFromToken();
+            }catch(Exception e)
+            {
+            }
             var pageCount = Math.Ceiling(_dbContext.Blog.Count() / (float)model.Row);
             string queryString = $@"select *, (foo.score + foo.comments) ""totalPoint"" from(select * from (select 
 b.""Id"" as id,
 anu.""UserName"" as username ,
-to_char(b.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') as postedOn,
+to_char(b.""CreatedAt"", 'YYYY-MM-DD HH:MI AM') as ""postedOn"",
 anu.""ProfilePath"" as ""userProfile"", anu.""Id"" as ""userId"", b.""CreatedAt"",
 coalesce ((select sum(case when brm.""Reaction""  = 'UPVOTE' then 2 else -1 end) from ""BlogReactMappings"" brm where brm.""BlogId"" = b.""Id""),0) score,
 coalesce ((select count(*) from ""Comments"" c where ""BlogId"" = b.""Id""), 0) comments,

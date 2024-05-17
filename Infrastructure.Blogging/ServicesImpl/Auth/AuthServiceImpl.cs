@@ -57,6 +57,8 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
             // Construct the reset password URL
             string resetUrl = $"{_configuration["FrontUrl"]}/reset-password/{user.Email}/{encodedToken}";
             string emailBody = $"<a href='{resetUrl}'>Click here to reset your password.</a>";
+
+            // Send password reset mail to user email
              _emailService.SendEmailAsync(email, "Click link to reset password", emailBody);
             return "Check your email";
         }
@@ -74,9 +76,13 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
                 // If the role doesn't exist, return error
                 throw new Exception("Invalid role specified.");
             }
+
+            // for user profile picture, saving selected file in a new locaation and assign
             if (model.FileId != null)
             {
                 TemporaryAttachments tempAttach = await _dbContext.TemporaryAttachments.FirstOrDefaultAsync(s => s.Id == model.FileId);
+
+                // copying the user selected file from temporary folder to picture folder
                 user.ProfilePath = genericFileUtils.CopyFileToServer(tempAttach.Location, FilePathMapping.BLOG_PICTURE, FilePathConstants.TempPath);
             }
 
@@ -91,10 +97,6 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
 
                 throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
             }
-
-
-
-
         }
 
         public async Task ResetUserPassword(ResetPasswordViewModel model)
@@ -102,7 +104,7 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
             AppUser user = await _userRepo.FindByEmail(model.Email);
          
 
-            // Reset password
+            // Resetting password
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (!result.Succeeded)
             {
@@ -111,7 +113,7 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
 
         }
 
-        public async Task<AuthViewResponse> token(LoginViewModel model)
+        public async Task<AuthViewResponse> login(LoginViewModel model)
         {
 
             AppUser user = await _userRepo.FindByEmail(model.Email);
@@ -145,7 +147,8 @@ namespace Infrastructure.Blogging.ServicesImpl.Auth
                 return new AuthViewResponse() { 
                     jwtToken= tokenHandler.WriteToken(token) ,
                     roles = (await _userManager.GetRolesAsync(user)).FirstOrDefault(),
-                    username = user.UserName
+                    username = user.UserName,
+                    userId = user.Id
 
             }; ;
             }

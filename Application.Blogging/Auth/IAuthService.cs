@@ -10,7 +10,7 @@ namespace Application.Blogging.Auth
     public interface IAuthService
     {
         Task registerUser(RegisterViewModel model);
-        Task<AuthViewResponse> token(LoginViewModel model);
+        Task<AuthViewResponse> login(LoginViewModel model);
         Task<string> GeneratePasswordResetToken(string email);
         Task ResetUserPassword(ResetPasswordViewModel model);
     }

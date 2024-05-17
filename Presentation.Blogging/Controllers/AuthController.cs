@@ -7,6 +7,7 @@ using Domain.Blogging.enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Infrastructure.Blogging;
 
 namespace Presentation.Blogging.Controllers
 {
@@ -17,12 +18,14 @@ namespace Presentation.Blogging.Controllers
     public class AuthController : GenericController
     {
         private readonly IAuthService authService;
+        private readonly MyHub hub;
         private string moduleName;
-        public record UserSession(string? Id, string? Name, string? Email, string? Role);
+        public record UserSession(string? Id, string? Name, string? Email, string? Role, MyHub hub);
         public AuthController(IAuthService authService)
         {
             this.authService = authService;
             this.moduleName = ModuleNameConstant.AUTH;
+            this.hub = hub;
         }
 
         [HttpPost]
@@ -36,7 +39,7 @@ namespace Presentation.Blogging.Controllers
         public async Task<Object> LoginUser (LoginViewModel model)
         {
             return SuccessResponse(MessageConstantMerge.requetMessage(MessageConstant.POST, moduleName), CrudStatus.SAVE,
-                await authService.token(model));
+                await authService.login(model));
         } 
         
         [HttpGet("forgot-password/{email}")]
